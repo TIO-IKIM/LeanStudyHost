@@ -1,0 +1,122 @@
+version: "3.7"
+
+services:
+  nginx:
+    build: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "81:81"
+    depends_on:
+      - orthanc
+
+  heimdall:
+    image: linuxserver/heimdall
+    restart: unless-stopped
+    env_file:
+      - lsh/environments/heimdall/heimdall.env
+
+    volumes:
+      - ./Heimdall:/config
+    ports:
+      - "8090:80"
+
+  fhir:
+    container_name: fhir
+    image: "hapiproject/hapi:latest"
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    configs:
+      - source: hapi
+        target: /app/config/application.yaml
+    depends_on:
+      - fhir-db
+
+  fhir-db:
+    image: postgres
+    restart: unless-stopped
+    env_file:
+      - lsh/environments/fhir/fhir-db.env
+    volumes:
+      - ./hapi.postgres.data:/var/lib/postgresql/data
+
+#  fhir:
+#    image: samply/blaze:latest
+#    restart: unless-stopped
+#    ports:
+#      - "8080:8080"
+
+  orthanc-index-db:
+    image: postgres
+    restart: unless-stopped
+    env_file:
+      - lsh/environments/orthanc/orthanc-index-db.env
+
+  orthanc:
+    image: osimis/orthanc
+    restart: unless-stopped
+    depends_on:
+      - orthanc-index-db
+    ports:
+      - "104:4242"
+#      - "80:8042"
+    expose:
+      - 8042
+    volumes:
+      - "orthanc-storage:/var/lib/orthanc/db:Z"
+      - "./OrthancEvents.py:/tmp/OrthancEvents.py:ro"
+    env_file:
+      - lsh/environments/orthanc/orthanc.env
+
+  minio:
+    image: bitnami/minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_storage:/wsi-storage
+    env_file:
+      - lsh/environments/minio/minio.env
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+      - django
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add storage http://minio:9000 demo demodemo;
+      /usr/bin/mc mb storage/wsi-storage;
+      /usr/bin/mc mb storage/orthanc;
+      /usr/bin/mc alias set storage http://minio:9000 demo demodemo;
+      /usr/bin/mc event add storage/wsi-storage arn:minio:sqs::DJANGO:webhook --event 'put,delete'
+      "
+#      mc admin service restart storage ?
+
+
+  django:
+    image: ghcr.io/diatools/ikim/devops/lh/django:0.1
+    restart: unless-stopped
+    build:
+      context: lsh
+    tty: true
+    links:
+      - orthanc
+      - fhir
+      - minio
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./lsh/StudyUpload/logs/:/lsh/StudyUpload/logs"
+
+configs:
+  hapi:
+     file: ./hapi.application.yaml
+
+volumes:
+  orthanc-storage:
+  minio_storage:

@@ -1,0 +1,14 @@
+FORMAT dicom
+%header
+REPLACE Allergies
+KEEP EthnicGroup
+KEEP PatientAge
+KEEP PatientSex
+KEEP PatientSexNeutered
+KEEP PatientSize
+KEEP PatientWeight
+REPLACE PatientState
+KEEP PregnancyStatus
+REPLACE PreMedication
+KEEP SmokingStatus
+REPLACE SpecialNeeds

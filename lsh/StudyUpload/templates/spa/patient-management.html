@@ -1,0 +1,26 @@
+{% load static %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
+
+	<title>MML@IKIM - Patient management</title>
+
+	<link rel='icon' type='image/png' href="{% static 'frontend/favicon.png' %}">
+	<link rel='stylesheet' href="{% static 'frontend/global.css' %}">
+	<link rel='stylesheet' href="{% static 'frontend/pmgmt.css' %}">
+
+	<script defer src="{% static 'frontend/pmgmt.js' %}"></script>
+	<script>
+		var fhir_patient_count = "{{ fhir_patient_count|escapejs }}";
+		var fhir_patients = "{{ fhir_patients|escapejs }}";
+	</script>
+</head>
+
+<body>
+
+</body>
+</html>

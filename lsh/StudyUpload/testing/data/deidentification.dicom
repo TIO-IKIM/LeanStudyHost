@@ -1,0 +1,413 @@
+FORMAT dicom
+
+%header
+
+ADD PatientIdentityRemoved YES
+ADD DeidentificationMethod IKIM_DEID
+# Tags that require custom regex expressions
+# Curve Data"(50xx,xxxx)"
+REMOVE contains:^50.{6}$
+# Overlay comments and data (60xx[34]000)
+REMOVE contains:^60.{2}[34]000$
+# Private tags ggggeeee where gggg is odd
+REMOVE contains:^.{3}[13579].{4}$
+
+REPLACE contains:Date|Time func:jitter_ts
+
+BLANK AccessionNumber
+REMOVE AcquisitionComments
+REMOVE AcquisitionContextSequence
+REMOVE AcquisitionDeviceProcessingDescription
+REPLACE AcquisitionFieldOfViewLabel REMOVED
+REMOVE AcquisitionProtocolDescription
+REMOVE ActualHumanPerformersSequence
+REMOVE AdditionalPatientHistory
+REMOVE AddressTrial
+REMOVE AdmissionID
+REMOVE AdmittingDiagnosesCodeSequence
+REMOVE AdmittingDiagnosesDescription
+REMOVE Allergies
+REMOVE Arbitrary
+REMOVE AuthorObserverSequence
+REMOVE BarcodeValue
+REMOVE BeamDescription
+REMOVE BolusDescription
+REMOVE BranchOfService
+REMOVE CameraOwnerName
+REMOVE CassetteID
+BLANK ClinicalTrialCoordinatingCenterName
+REMOVE ClinicalTrialProtocolEthicsCommitteeApprovalNumber
+REPLACE ClinicalTrialProtocolEthicsCommitteeName REMOVED
+REPLACE ClinicalTrialProtocolID REMOVED
+BLANK ClinicalTrialProtocolName
+REMOVE ClinicalTrialSeriesDescription
+REMOVE ClinicalTrialSeriesID
+BLANK ClinicalTrialSiteID
+BLANK ClinicalTrialSiteName
+REPLACE ClinicalTrialSponsorName REMOVED
+REPLACE ClinicalTrialSubjectID REMOVED
+REPLACE ClinicalTrialSubjectReadingID REMOVED
+REMOVE CommentsOnRadiationDose
+REMOVE CommentsOnThePerformedProcedureStep
+REMOVE CompensatorDescription
+REPLACE ConcatenationUID func:new_UID
+BLANK ConceptualVolumeCombinationDescription
+BLANK ConceptualVolumeDescription
+REPLACE ConceptualVolumeUID func:new_UID
+REMOVE ConfidentialityConstraintOnPatientDataDescription
+REPLACE ConstituentConceptualVolumeUID func:new_UID
+BLANK ConsultingPhysicianName
+REMOVE ConsultingPhysicianIdentificationSequence
+REMOVE ContainerComponentID
+REMOVE ContainerDescription
+REPLACE ContainerIdentifier REMOVED
+REMOVE ContentCreatorIdentificationCodeSequence
+BLANK ContentCreatorName
+REPLACE ContentSequence REMOVED
+BLANK ContrastBolusAgent
+REMOVE ContributionDescription
+REMOVE CountryOfResidence
+REMOVE CurrentObserverTrial
+REMOVE CurrentPatientLocation
+REMOVE CustodialOrganizationSequence
+REMOVE DataSetTrailingPadding
+REMOVE DecompositionDescription
+REMOVE DerivationDescription
+REMOVE DetectorID
+BLANK DeviceAlternateIdentifier
+REMOVE DeviceDescription
+REPLACE DeviceLabel REMOVED
+REMOVE DeviceSerialNumber
+REMOVE DeviceSettingDescription
+REPLACE DeviceUID func:new_UID
+REMOVE DigitalSignaturesSequence
+REPLACE DigitalSignatureUID func:new_UID
+REPLACE DimensionOrganizationUID func:new_UID
+REMOVE DischargeDiagnosisDescription
+REMOVE DistributionAddress
+REMOVE DistributionName
+REMOVE DoseReferenceDescription
+REPLACE DoseReferenceUID func:new_UID
+REPLACE DosimetricObjectiveUID func:new_UID
+REMOVE EntityDescription
+REPLACE EntityLabel REMOVED
+REPLACE EntityLongLabel REMOVED
+REMOVE EntityName
+REMOVE EquipmentFrameOfReferenceDescription
+REMOVE EthnicGroup
+REPLACE FailedSOPInstanceUIDList func:new_UID
+REPLACE FiducialUID func:new_UID
+BLANK FillerOrderNumberImagingServiceRequest
+REMOVE FixationDeviceDescription
+REPLACE FlowIdentifier REMOVED
+REPLACE FlowIdentifierSequence REMOVED
+BLANK FractionationNotes
+REMOVE FractionGroupDescription
+REMOVE FrameComments
+REPLACE FrameOfReferenceUID func:new_UID
+REMOVE GantryID
+REMOVE GeneratorID
+REMOVE GPSAltitude
+REMOVE GPSAltitudeRef
+REMOVE GPSAreaInformation
+REMOVE GPSDestBearing
+REMOVE GPSDestBearingRef
+REMOVE GPSDestDistance
+REMOVE GPSDestDistanceRef
+REMOVE GPSDestLatitude
+REMOVE GPSDestLatitudeRef
+REMOVE GPSDestLongitude
+REMOVE GPSDestLongitudeRef
+REMOVE GPSDifferential
+REMOVE GPSDOP
+REMOVE GPSImgDirection
+REMOVE GPSImgDirectionRef
+REMOVE GPSLatitude
+REMOVE GPSLatitudeRef
+REMOVE GPSLongitude
+REMOVE GPSLongitudeRef
+REMOVE GPSMapDatum
+REMOVE GPSMeasureMode
+REMOVE GPSProcessingMethod
+REMOVE GPSSatellites
+REMOVE GPSSpeed
+REMOVE GPSSpeedRef
+REMOVE GPSStatus
+REMOVE GPSTrack
+REMOVE GPSTrackRef
+REMOVE GPSVersionID
+REPLACE GraphicAnnotationSequence REMOVED
+REMOVE HumanPerformerName
+REMOVE HumanPerformerOrganization
+REMOVE IconImageSequence
+REMOVE IdentifyingComments
+REMOVE ImageComments
+# ADD ImageComments func:handle_image_comments
+REMOVE ImagePresentationComments
+REMOVE ImagingServiceRequestComments
+REMOVE Impressions
+REPLACE InstanceCreatorUID func:new_UID
+REMOVE InstanceOriginStatus
+REMOVE InstitutionAddress
+REMOVE InstitutionalDepartmentName
+REMOVE InstitutionalDepartmentTypeCodeSequence
+REMOVE InstitutionCodeSequence
+REMOVE InstitutionName
+REMOVE InsurancePlanIdentification
+REMOVE IntendedRecipientsOfResultsIdentificationSequence
+REPLACE InterlockDescription REMOVED
+REPLACE InterlockOriginDescription REMOVED
+REMOVE InterpretationApproverSequence
+REMOVE InterpretationAuthor
+REMOVE InterpretationDiagnosisDescription
+REMOVE InterpretationIDIssuer
+REMOVE InterpretationRecorder
+REMOVE InterpretationText
+REMOVE InterpretationTranscriber
+REPLACE IrradiationEventUID func:new_UID
+REMOVE IssuerOfAdmissionID
+REMOVE IssuerOfAdmissionIDSequence
+REMOVE IssuerOfPatientID
+REMOVE IssuerOfServiceEpisodeID
+REMOVE IssuerOfServiceEpisodeIDSequence
+BLANK IssuerOfTheContainerIdentifierSequence
+BLANK IssuerOfTheSpecimenIdentifierSequence
+REMOVE LabelText
+REPLACE LargePaletteColorLookupTableUID func:new_UID
+REMOVE LensMake
+REMOVE LensModel
+REMOVE LensSerialNumber
+REMOVE LensSpecification
+REMOVE LongDeviceDescription
+REMOVE MAC
+REMOVE MakerNote
+REPLACE ManufacturerDeviceClassUID func:new_UID
+BLANK ManufacturerDeviceIdentifier
+REPLACE MediaStorageSOPInstanceUID func:new_UID
+REMOVE MedicalAlerts
+REMOVE MedicalRecordLocator
+REMOVE MilitaryRank
+REMOVE ModifiedAttributesSequence
+REMOVE ModifiedImageDescription
+REMOVE ModifyingDeviceID
+REMOVE MultienergyAcquisitionDescription
+REPLACE MultiplexGroupUID func:new_UID
+REMOVE NameOfPhysiciansReadingStudy
+REMOVE NamesOfIntendedRecipientsOfResults
+REMOVE NonconformingModifiedAttributesSequence
+REMOVE NonconformingDataElementValue
+REPLACE ObservationSubjectUIDTrial func:new_UID
+REPLACE ObservationUID func:new_UID
+REMOVE Occupation
+REMOVE OperatorIdentificationSequence
+REMOVE OperatorsName
+REMOVE OrderCallbackPhoneNumber
+REMOVE OrderCallbackTelecomInformation
+REMOVE OrderEnteredBy
+REMOVE OrderEntererLocation
+REMOVE OriginalAttributesSequence
+REMOVE OtherPatientIDs
+REMOVE OtherPatientIDsSequence
+REMOVE OtherPatientNames
+REMOVE OverlayComments
+REMOVE OverlayData
+REPLACE PaletteColorLookupTableUID func:new_UID
+REMOVE ParticipantSequence
+REMOVE PatientAddress
+REMOVE PatientAge
+REMOVE PatientBirthName
+REMOVE PatientInstitutionResidence
+REMOVE PatientInsurancePlanCodeSequence
+REMOVE PatientMotherBirthName
+BLANK PatientName
+REMOVE PatientPrimaryLanguageCodeSequence
+REMOVE PatientPrimaryLanguageModifierCodeSequence
+REMOVE PatientReligiousPreference
+BLANK PatientSex
+REMOVE PatientSexNeutered
+REMOVE PatientSize
+REMOVE PatientTelecomInformation
+REMOVE PatientTelephoneNumbers
+REMOVE PatientWeight
+REMOVE PatientComments
+# BLANK PatientID
+REPLACE PatientSetupUID func:new_UID
+REMOVE PatientState
+REMOVE PatientTransportArrangements
+REMOVE PerformedLocation
+REMOVE PerformedProcedureStepDescription
+REMOVE PerformedProcedureStepID
+REMOVE PerformedStationAETitle
+REMOVE PerformedStationGeographicLocationCodeSequence
+REMOVE PerformedStationName
+REMOVE PerformedStationNameCodeSequence
+REMOVE PerformingPhysicianName
+REMOVE PerformingPhysicianIdentificationSequence
+REMOVE PersonAddress
+REMOVE PersonTelecomInformation
+REMOVE PersonTelephoneNumbers
+REPLACE PersonIdentificationCodeSequence REMOVED
+REPLACE PersonName REMOVED
+REMOVE PhysiciansOfRecord
+REMOVE PhysiciansOfRecordIdentificationSequence
+REMOVE PhysiciansReadingStudyIdentificationSequence
+REMOVE PhysicianApprovingInterpretation
+BLANK PlacerOrderNumberImagingServiceRequest
+REMOVE PlateID
+REMOVE PregnancyStatus
+REMOVE PreMedication
+REMOVE PrescriptionDescription
+BLANK PrescriptionNotes
+BLANK PrescriptionNotesSequence
+REPLACE PresentationDisplayCollectionUID func:new_UID
+REPLACE PresentationSequenceCollectionUID func:new_UID
+REMOVE PriorTreatmentDoseDescription
+REMOVE ProtocolName
+REPLACE RadiationDoseIdentificationLabel REMOVED
+REPLACE RadiationDoseInVivoMeasurementLabel REMOVED
+BLANK RadiationGenerationModeDescription
+REPLACE RadiationGenerationModeLabel REMOVED
+REMOVE ReasonForOmissionDescription
+REMOVE ReasonForRequestedProcedureCodeSequence
+REMOVE ReasonForStudy
+BLANK ReasonForSuperseding
+REMOVE ReasonForTheImagingServiceRequest
+REMOVE ReasonForTheRequestedProcedure
+REMOVE ReasonForVisit
+REMOVE ReasonForVisitCodeSequence
+REPLACE ReferencedConceptualVolumeUID func:new_UID
+REMOVE ReferencedDigitalSignatureSequence
+REPLACE ReferencedDoseReferenceUID func:new_UID
+REPLACE ReferencedDosimetricObjectiveUID func:new_UID
+REPLACE ReferencedFiducialsUID func:new_UID
+REPLACE ReferencedFrameOfReferenceUID func:new_UID
+REPLACE ReferencedGeneralPurposeScheduledProcedureStepTransactionUID func:new_UID
+REMOVE ReferencedImageSequence
+REPLACE ReferencedObservationUIDTrial func:new_UID
+REMOVE ReferencedPatientAliasSequence
+REMOVE ReferencedPatientPhotoSequence
+REMOVE ReferencedPatientSequence
+REMOVE ReferencedPerformedProcedureStepSequence
+REMOVE ReferencedSOPInstanceMACSequence
+REPLACE ReferencedSOPInstanceUID func:new_UID
+REPLACE ReferencedSOPInstanceUIDInFile func:new_UID
+REMOVE ReferencedStudySequence
+REMOVE ReferringPhysicianAddress
+BLANK ReferringPhysicianName
+REMOVE ReferringPhysicianTelephoneNumbers
+REMOVE ReferringPhysicianIdentificationSequence
+REMOVE RegionOfResidence
+REPLACE RelatedFrameOfReferenceUID func:new_UID
+REMOVE RequestAttributesSequence
+REMOVE RequestedContrastAgent
+REMOVE RequestedProcedureComments
+REMOVE RequestedProcedureDescription
+REMOVE RequestedProcedureID
+REMOVE RequestedProcedureLocation
+REMOVE RequestedSeriesDescription
+REMOVE RequestingPhysician
+REMOVE RequestingService
+REMOVE RespiratoryMotionCompensationTechniqueDescription
+REMOVE ResponsibleOrganization
+REMOVE ResponsiblePerson
+REMOVE ResultsComments
+REMOVE ResultsDistributionListSequence
+REMOVE ResultsIDIssuer
+REMOVE ReviewerName
+REMOVE ROIDescription
+REMOVE ROIGenerationDescription
+BLANK ROIInterpreter
+BLANK ROIName
+REMOVE ROIObservationDescription
+REMOVE ROIObservationLabel
+BLANK RTAccessoryDeviceSlotID
+BLANK RTAccessoryHolderSlotID
+BLANK RTPhysicianIntentNarrative
+REMOVE RTPlanDescription
+REPLACE RTPlanLabel REMOVED
+REMOVE RTPlanName
+REPLACE RTPrescriptionLabel REMOVED
+REPLACE RTToleranceSetLabel REMOVED
+REMOVE RTTreatmentApproachLabel
+REPLACE RTTreatmentPhaseUID func:new_UID
+REMOVE ScheduledHumanPerformersSequence
+REMOVE ScheduledPatientInstitutionResidence
+REMOVE ScheduledPerformingPhysicianName
+REMOVE ScheduledPerformingPhysicianIdentificationSequence
+REMOVE ScheduledProcedureStepDescription
+REMOVE ScheduledProcedureStepID
+REMOVE ScheduledProcedureStepLocation
+REMOVE ScheduledStationAETitle
+REMOVE ScheduledStationGeographicLocationCodeSequence
+REMOVE ScheduledStationName
+REMOVE ScheduledStationNameCodeSequence
+REMOVE ScheduledStudyLocation
+REMOVE ScheduledStudyLocationAETitle
+REMOVE SeriesDescription
+REPLACE SeriesInstanceUID func:new_UID
+REMOVE ServiceEpisodeDescription
+REMOVE ServiceEpisodeID
+REMOVE SetupTechniqueDescription
+REMOVE ShieldingDeviceDescription
+REMOVE SlideIdentifier
+REMOVE SmokingStatus
+REPLACE SOPInstanceUID func:new_UID
+REPLACE SourceConceptualVolumeUID func:new_UID
+REPLACE SourceIdentifier REMOVED
+REMOVE SourceImageSequence
+REMOVE SourceManufacturer
+REMOVE SourceSerialNumber
+REMOVE SpecialNeeds
+REMOVE SpecimenAccessionNumber
+REMOVE SpecimenDetailedDescription
+REPLACE SpecimenIdentifier REMOVED
+BLANK SpecimenPreparationSequence
+REMOVE SpecimenShortDescription
+REPLACE SpecimenUID func:new_UID
+REMOVE StationName
+REPLACE StorageMediaFileSetUID func:new_UID
+REMOVE StructureSetDescription
+REPLACE StructureSetLabel REMOVED
+REMOVE StructureSetName
+REMOVE StudyComments
+REMOVE StudyDescription
+ADD StudyDescription func:handle_image_comments
+BLANK StudyID
+REMOVE StudyIDIssuer
+REPLACE StudyInstanceUID func:new_UID
+REPLACE SynchronizationFrameOfReferenceUID func:new_UID
+REPLACE TargetUID func:new_UID
+REMOVE TelephoneNumberTrial
+REPLACE TemplateExtensionCreatorUID func:new_UID
+REPLACE TemplateExtensionOrganizationUID func:new_UID
+REMOVE TextComments
+REMOVE TextString
+REMOVE TopicAuthor
+REMOVE TopicKeywords
+REMOVE TopicSubject
+REMOVE TopicTitle
+REPLACE TrackingUID func:new_UID
+REPLACE TransactionUID func:new_UID
+REMOVE TransducerIdentificationSequence
+REMOVE TreatmentMachineName
+REPLACE TreatmentPositionGroupLabel REMOVED
+REPLACE TreatmentPositionGroupUID func:new_UID
+REPLACE TreatmentSessionUID func:new_UID
+REPLACE TreatmentSite REMOVED
+BLANK TreatmentTechniqueNotes
+REPLACE TreatmentToleranceViolationDescription REMOVED
+REMOVE UDISequence
+REPLACE UID func:new_UID
+REMOVE UniqueDeviceIdentifier
+REPLACE UserContentLabel REMOVED
+REPLACE UserContentLongLabel REMOVED
+REMOVE VerbalSourceTrial
+REMOVE VerbalSourceIdentifierCodeSequenceTrial
+BLANK VerifyingObserverIdentificationCodeSequence
+REPLACE VerifyingObserverName REMOVED
+REPLACE VerifyingObserverSequence REMOVED
+REPLACE VerifyingOrganization REMOVED
+REMOVE VisitComments
+REPLACE XRayDetectorID REMOVED
+REMOVE XRayDetectorLabel
+REPLACE XRaySourceID REMOVED

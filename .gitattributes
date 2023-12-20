@@ -1,0 +1,2 @@
+test_data/1.dcm filter=lfs diff=lfs merge=lfs -text
+test_data/CMU-1-JP2K-33005.svs filter=lfs diff=lfs merge=lfs -text

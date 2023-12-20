@@ -1,0 +1,14 @@
+Heimdall/keys
+Heimdall/nginx
+Heimdall/php
+Heimdall/log
+Heimdall/www/logs
+Heimdall/www/app.sqlite
+.DS_Store
+*.pyc
+*.log
+
+.env
+.pre-commit-config.yaml
+/.ruff_cache/
+/hapi.postgres.data/
