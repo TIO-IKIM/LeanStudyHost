@@ -2,6 +2,7 @@ window.config = {
     // default: '/'
     routerBasename: '/',
     extensions: [],
+    modes: [],
     showStudyList: true,
     filterQueryParam: false,
     servers: {

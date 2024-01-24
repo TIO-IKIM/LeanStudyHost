@@ -60,6 +60,7 @@ services:
     restart: unless-stopped
     depends_on:
       - orthanc-index-db
+      - minio
     ports:
       - "104:4242"
 #      - "80:8042"
